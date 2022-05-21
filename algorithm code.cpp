@@ -232,3 +232,91 @@ void aStarSearch(const array<array<int, COL>, ROW>& grid,
                         hNew = calculateHValue(neighbour,
 
 
+
+
+                            dest);
+                        fNew = gNew + hNew;
+
+                        // If it isn’t on the open list, add
+                        // it to the open list. Make the
+                        // current square the parent of this
+                        // square. Record the f, g, and h
+                        // costs of the square cell
+                        //             OR
+                        // If it is on the open list
+                        // already, check to see if this
+                        // path to that square is better,
+                        // using 'f' cost as the measure.
+                        if (cellDetails[neighbour.first]
+                            [neighbour.second]
+                        .f
+                            == -1
+                            cellDetails[neighbour.first]
+                            [neighbour.second]
+                        .f
+                                   > fNew) {
+                            openList.emplace(
+                                fNew, neighbour.first,
+                                neighbour.second);
+
+                            // Update the details of this
+                            // cell
+                            cellDetails[neighbour.first]
+                                [neighbour.second]
+                            .g
+                                = gNew;
+                            cellDetails[neighbour.first]
+                                [neighbour.second]
+                            .h
+                                = hNew;
+                            cellDetails[neighbour.first]
+                                [neighbour.second]
+                            .f
+                                = fNew;
+                            cellDetails[neighbour.first]
+                                [neighbour.second]
+                            .parent
+                                = { i, j };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // When the destination cell is not found and the open
+    // list is empty, then we conclude that we failed to
+    // reach the destination cell. This may happen when the
+    // there is no way to destination cell (due to
+    // blockages)
+    printf("Failed to find the Destination Cell\n");
+}
+
+// Driver program to test above function
+int main()
+{
+    /* Description of the Grid-
+    1--> The cell is not blocked
+    0--> The cell is blocked */
+    array<array<int, 10>, 9> grid{
+        { { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 } },
+          { { 1, 1, 1, 0, 1, 1, 1, 0, 1, 1 } },
+          { { 1, 1, 1, 0, 1, 1, 0, 1, 0, 1 } },
+          { { 0, 0, 1, 0, 1, 0, 0, 0, 0, 1 } },
+          { { 1, 1, 1, 0, 1, 1, 1, 0, 1, 0 } },
+          { { 1, 0, 1, 1, 1, 1, 0, 1, 0, 0 } },
+          { { 1, 0, 0, 0, 0, 1, 0, 0, 0, 1 } },
+          { { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 } },
+          { { 1, 1, 1, 0, 0, 0, 1, 0, 0, 1 } } }
+    };
+
+    // Source is the left-most bottom-most corner
+    Pair src(8, 0);
+
+    // Destination is the left-most top-most corner
+    Pair dest(0, 0);
+
+    aStarSearch(grid, src, dest);
+
+    return 0;
+}
